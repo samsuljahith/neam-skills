@@ -1,0 +1,31 @@
+skill Calculator {
+  description: "Perform basic math operations: add, subtract, multiply, divide, power, square root",
+  params: [
+    { name: "operation", schema: { "type": "string", "description": "The operation to perform: add, sub, mul, div, pow, sqrt" } },
+    { name: "a", schema: { "type": "number", "description": "The first number (or the only number for sqrt)" } },
+    { name: "b", schema: { "type": "number", "description": "The second number (not required for sqrt)" } }
+  ],
+  impl: fun(operation, a, b) {
+    if operation == "add" {
+      return a + b;
+    } else if operation == "sub" {
+      return a - b;
+    } else if operation == "mul" {
+      return a * b;
+    } else if operation == "div" {
+      if b == 0 {
+        return "Error: Cannot divide by zero";
+      }
+      return a / b;
+    } else if operation == "pow" {
+      return math_pow(a, b);
+    } else if operation == "sqrt" {
+      if a < 0 {
+        return "Error: Cannot take square root of a negative number";
+      }
+      return math_sqrt(a);
+    } else {
+      return "Error: Unknown operation. Use add, sub, mul, div, pow, or sqrt";
+    }
+  }
+}

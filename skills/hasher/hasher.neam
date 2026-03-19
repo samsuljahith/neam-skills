@@ -1,0 +1,20 @@
+skill Hasher {
+  description: "Hash a string using a chosen algorithm (sha256, sha1, or md5)",
+  params: [
+    { name: "algorithm", schema: { "type": "string", "description": "The hashing algorithm to use: sha256, sha1, or md5" } },
+    { name: "data", schema: { "type": "string", "description": "The string to hash" } }
+  ],
+  impl: fun(algorithm, data) {
+    return crypto_hash(algorithm, data);
+  }
+}
+
+skill Base64Encode {
+  description: "Encode a string using Base64 encoding",
+  params: [
+    { name: "text", schema: { "type": "string", "description": "The plain text string to encode in Base64" } }
+  ],
+  impl: fun(text) {
+    return crypto_base64_encode(text);
+  }
+}

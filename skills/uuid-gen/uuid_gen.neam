@@ -1,0 +1,7 @@
+skill UUIDGen {
+  description: "Generate a random UUID v4 (a unique identifier string)",
+  params: [],
+  impl: fun() {
+    return crypto_uuid_v4();
+  }
+}

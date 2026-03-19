@@ -1,28 +1,60 @@
 # Neam Skills
 
-Claude Code skills for the [Neam programming language](https://github.com/neam-lang/Neam) — the compiled DSL for building AI agent systems.
+A collection of ready-made skills for the [Neam programming language](https://github.com/neam-lang/Neam).
+
+Pick a skill, copy it into your `.neam` file, and attach it to your agent.
 
 ---
 
-## What is Neam?
+## Available Skills
 
-Neam is a compiled domain-specific language for building AI agent systems. It provides first-class syntax for:
+| Skill | File | What It Does |
+|-------|------|-------------|
+| `Calculator` | [calculator](./skills/calculator/) | Add, subtract, multiply, divide, power, square root |
+| `WebFetch` | [web-fetch](./skills/web-fetch/) | Fetch a URL with HTTP GET |
+| `HTTPRequest` | [http-request](./skills/http-request/) | Make HTTP requests (GET, POST, PUT, DELETE) |
+| `FileReader` | [file-reader](./skills/file-reader/) | Read a file from disk |
+| `FileWriter` | [file-writer](./skills/file-writer/) | Write content to a file |
+| `JSONParser` + `JSONFormatter` | [json-tools](./skills/json-tools/) | Parse and format JSON |
+| `GetTimestamp` + `FormatTime` | [timer](./skills/timer/) | Get current time, format timestamps |
+| `UUIDGen` | [uuid-gen](./skills/uuid-gen/) | Generate a random UUID |
+| `Hasher` + `Base64Encode` | [hasher](./skills/hasher/) | Hash strings, encode to Base64 |
+| `TextUpper` + `TextLower` + `TextTrim` | [text-tools](./skills/text-tools/) | Basic text transformations |
 
-- **Agents** — wrap LLM providers with system prompts and call them via `.ask()`
-- **Knowledge Bases** — connect agents to documents via RAG with 7 retrieval strategies
-- **Skills & Tools** — extend agents with callable functions
-- **Guards & Guardchains** — runtime validation pipelines for security
-- **Budgets** — enforce cost, time, and token limits
-- **Cloud Deployment** — compile to Docker, Kubernetes, Lambda, Cloud Run, and more
+---
+
+## How to Use
+
+1. Open any skill folder and copy the `.neam` file contents
+2. Paste the skill into your `.neam` program
+3. Add the skill name to your agent's `skills` list
 
 ```neam
-agent Assistant {
-  provider: "openai",
-  model: "gpt-4o-mini",
-  system: "You are a helpful assistant."
+// 1. Paste the skill definition
+skill Calculator {
+  description: "Perform basic math operations",
+  params: [
+    { name: "operation", schema: { "type": "string", "description": "add/sub/mul/div/pow/sqrt" } },
+    { name: "a", schema: { "type": "number", "description": "First number" } },
+    { name: "b", schema: { "type": "number", "description": "Second number" } }
+  ],
+  impl: fun(operation, a, b) {
+    if operation == "add" { return a + b; }
+    if operation == "mul" { return a * b; }
+    return 0;
+  }
 }
 
-let answer = Assistant.ask("What is the capital of France?");
+// 2. Attach it to your agent
+agent MathBot {
+  provider: "openai",
+  model: "gpt-4o-mini",
+  system: "You are a math assistant. Use the Calculator skill to solve problems.",
+  skills: [Calculator]
+}
+
+// 3. Run it
+let answer = MathBot.ask("What is 25 multiplied by 4?");
 emit answer;
 ```
 
@@ -30,102 +62,45 @@ emit answer;
 
 ## Skills
 
-| Skill | Description |
-|-------|-------------|
-| [neam-patterns](./skills/neam-patterns/SKILL.md) | Core Neam syntax, idioms, variables, functions, built-ins, and project structure |
-| [neam-agents](./skills/neam-agents/SKILL.md) | Agent design — single agents, multi-agent pipelines, subagents, memory, planning |
-| [neam-rag](./skills/neam-rag/SKILL.md) | RAG patterns — knowledge bases, retrieval strategies, chunk tuning, grounded agents |
-| [neam-testing](./skills/neam-testing/SKILL.md) | Testing — `test` blocks, assertions, test organization, integration tests |
-| [neam-security](./skills/neam-security/SKILL.md) | Security — guards, capabilities, guardchains, prompt injection defense |
-| [neam-deployment](./skills/neam-deployment/SKILL.md) | Deployment — Docker, Kubernetes, Lambda, Cloud Run, Helm, Terraform |
-| [neam-finops](./skills/neam-finops/SKILL.md) | FinOps — budgets, cost attribution, dashboard, model selection, benchmarking |
+### Calculator
+Math operations — add, subtract, multiply, divide, power, square root.
+→ [View skill](./skills/calculator/)
 
----
+### WebFetch
+Fetch content from any URL.
+→ [View skill](./skills/web-fetch/)
 
-## Installation
+### HTTPRequest
+Full HTTP requests with custom method, body, and headers.
+→ [View skill](./skills/http-request/)
 
-### Manual
+### FileReader
+Read a file from disk. Returns an error message if the file doesn't exist.
+→ [View skill](./skills/file-reader/)
 
-Copy the skill files into your Claude Code skills directory:
+### FileWriter
+Write text content to a file.
+→ [View skill](./skills/file-writer/)
 
-```bash
-# Clone the repo
-git clone https://github.com/samsuljahith/neam-skills.git
-cd neam-skills
+### JSONParser + JSONFormatter
+Parse a JSON string into an object, or convert an object back to a JSON string.
+→ [View skill](./skills/json-tools/)
 
-# Copy all skills
-cp -r skills/* ~/.claude/skills/
-```
+### GetTimestamp + FormatTime
+Get the current Unix timestamp, or format any timestamp into a readable date.
+→ [View skill](./skills/timer/)
 
-### Install a Single Skill
+### UUIDGen
+Generate a random UUID v4. No input needed.
+→ [View skill](./skills/uuid-gen/)
 
-```bash
-cp -r skills/neam-patterns ~/.claude/skills/
-```
+### Hasher + Base64Encode
+Hash a string (sha256/sha1/md5) or encode it to Base64.
+→ [View skill](./skills/hasher/)
 
----
-
-## Usage
-
-Once installed, reference a skill in your `CLAUDE.md` or activate it directly in Claude Code:
-
-```markdown
-# CLAUDE.md
-Use the neam-patterns skill when writing Neam code.
-Use the neam-agents skill when designing agent architectures.
-Use the neam-rag skill when building knowledge-connected agents.
-Use the neam-security skill when adding guards or capabilities.
-Use the neam-deployment skill when deploying Neam agents.
-Use the neam-finops skill when configuring budgets or cost controls.
-```
-
----
-
-## Neam Quick Reference
-
-```bash
-# Build from source
-git clone https://github.com/neam-lang/Neam.git
-cd Neam && mkdir -p build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . --parallel
-
-# Compile and run
-neamc hello.neam -o hello.neamb
-neam-cli hello.neamb
-
-# REPL
-neam-cli
-
-# Deploy
-neam deploy --target kubernetes --replicas 3
-neam deploy --target aws-lambda --memory 512 --arch arm64
-neam deploy --target docker
-```
-
----
-
-## Skills Map
-
-```
-Neam Skills
-├── neam-patterns      ← Start here. Language fundamentals.
-├── neam-agents        ← Designing agent systems.
-│   ├── neam-rag       ← Adding knowledge / RAG.
-│   └── neam-security  ← Adding guards and access control.
-├── neam-testing       ← Writing tests for Neam code.
-├── neam-deployment    ← Shipping to cloud.
-└── neam-finops        ← Controlling cost.
-```
-
----
-
-## Contributing
-
-1. Fork the repo
-2. Add or improve a skill in `skills/<skill-name>/SKILL.md`
-3. Follow the frontmatter format: `name`, `description`, `origin: neam-skills`
-4. Open a pull request
+### TextUpper + TextLower + TextTrim
+Convert text to uppercase, lowercase, or remove extra whitespace.
+→ [View skill](./skills/text-tools/)
 
 ---
 

@@ -1,0 +1,29 @@
+skill TextUpper {
+  description: "Convert a string to uppercase",
+  params: [
+    { name: "text", schema: { "type": "string", "description": "The text to convert to uppercase" } }
+  ],
+  impl: fun(text) {
+    return string_upper(text);
+  }
+}
+
+skill TextLower {
+  description: "Convert a string to lowercase",
+  params: [
+    { name: "text", schema: { "type": "string", "description": "The text to convert to lowercase" } }
+  ],
+  impl: fun(text) {
+    return string_lower(text);
+  }
+}
+
+skill TextTrim {
+  description: "Remove leading and trailing whitespace from a string",
+  params: [
+    { name: "text", schema: { "type": "string", "description": "The text to trim" } }
+  ],
+  impl: fun(text) {
+    return string_trim(text);
+  }
+}

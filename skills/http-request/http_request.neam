@@ -1,0 +1,14 @@
+skill HTTPRequest {
+  description: "Make HTTP requests (GET, POST, PUT, DELETE) with optional body and headers",
+  params: [
+    { name: "method", schema: { "type": "string", "description": "HTTP method: GET, POST, PUT, or DELETE" } },
+    { name: "url", schema: { "type": "string", "description": "The full URL to send the request to" } },
+    { name: "body", schema: { "type": "string", "description": "Request body as a string (use empty string if not needed)" } },
+    { name: "headers", schema: { "type": "string", "description": "Request headers as a JSON string, e.g. {\"Content-Type\": \"application/json\"}" } }
+  ],
+  impl: fun(method, url, body, headers) {
+    let parsed_headers = json_parse(headers);
+    let response = http_request(method, url, body, parsed_headers);
+    return response;
+  }
+}

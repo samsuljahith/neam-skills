@@ -1,0 +1,13 @@
+skill FileReader {
+  description: "Read the contents of a file from disk",
+  params: [
+    { name: "path", schema: { "type": "string", "description": "The full path to the file you want to read, e.g. /home/user/notes.txt" } }
+  ],
+  impl: fun(path) {
+    if file_exists(path) {
+      return file_read_string(path);
+    } else {
+      return "Error: File not found: " + path;
+    }
+  }
+}

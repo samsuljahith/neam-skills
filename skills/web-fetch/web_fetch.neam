@@ -1,0 +1,10 @@
+skill WebFetch {
+  description: "Fetch content from a URL using HTTP GET",
+  params: [
+    { name: "url", schema: { "type": "string", "description": "The full URL to fetch, e.g. https://example.com/api/data" } }
+  ],
+  impl: fun(url) {
+    let response = http_get(url);
+    return response;
+  }
+}

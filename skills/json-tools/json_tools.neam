@@ -1,0 +1,20 @@
+skill JSONParser {
+  description: "Parse a JSON string and return it as an object",
+  params: [
+    { name: "text", schema: { "type": "string", "description": "A valid JSON string to parse, e.g. {\"name\": \"Alice\", \"age\": 30}" } }
+  ],
+  impl: fun(text) {
+    return json_parse(text);
+  }
+}
+
+skill JSONFormatter {
+  description: "Convert an object or value to a nicely formatted JSON string",
+  params: [
+    { name: "data", schema: { "type": "string", "description": "The data to format, passed as a JSON string" } }
+  ],
+  impl: fun(data) {
+    let obj = json_parse(data);
+    return json_stringify(obj);
+  }
+}

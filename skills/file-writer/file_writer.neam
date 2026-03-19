@@ -1,0 +1,11 @@
+skill FileWriter {
+  description: "Write content to a file on disk",
+  params: [
+    { name: "path", schema: { "type": "string", "description": "The full path where the file should be written, e.g. /home/user/output.txt" } },
+    { name: "content", schema: { "type": "string", "description": "The text content to write into the file" } }
+  ],
+  impl: fun(path, content) {
+    file_write_string(path, content);
+    return "Written to: " + path;
+  }
+}
