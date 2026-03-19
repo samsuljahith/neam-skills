@@ -1,85 +1,165 @@
 # NeamSkills
 
-Skills for the [Neam programming language](https://github.com/neam-lang/Neam).
+> Official skill library for the [Neam programming language](https://github.com/neam-lang/Neam)
+
+Neam is a compiled AI agent programming language. This repo gives you two things:
+
+1. **`neam-programming` skill** — import into Claude Code so Claude can write Neam for you
+2. **31 ready-made `.neam` skills** — copy into your agents to add abilities instantly
 
 ---
 
-## The Main Skill — Start Here
+## New to Neam? Start Here
 
-### `neam-programming`
+Import the `neam-programming` skill into Claude Code:
 
-> **If you are new to Neam — import this skill into Claude Code first.**
-
-The `neam-programming` skill teaches Claude the entire Neam language — syntax, agents, RAG, skills, guards, budgets, deployment, and all built-in functions. Once imported, Claude can write and debug Neam programs for you.
-
-**Location:** [`skills/neam-programming/SKILL.md`](./skills/neam-programming/SKILL.md)
-
-**How to use in Claude Code:**
-```
+```bash
 /import skills/neam-programming/SKILL.md
 ```
-Then just ask Claude to write Neam code — it knows the full language.
+
+Now Claude knows the full Neam language — syntax, agents, RAG, budgets, deployment, and every built-in function. Just ask it to write Neam code.
 
 ---
 
-## Ready-Made Neam Skills
+## Quick Example
 
-These are `.neam` files you can copy into your agent. Pick a skill, paste it into your program, and add it to your agent's `skills: []` list.
+```neam
+// 1. Copy a skill from this repo into your .neam file
+skill Calculator {
+  description: "Perform math operations",
+  params: [
+    { name: "operation", schema: { "type": "string", "description": "add/sub/mul/div" } },
+    { name: "a", schema: { "type": "number", "description": "First number" } },
+    { name: "b", schema: { "type": "number", "description": "Second number" } }
+  ],
+  impl: fun(operation, a, b) {
+    if (operation == "add") { return a + b; }
+    if (operation == "sub") { return a - b; }
+    if (operation == "mul") { return a * b; }
+    if (operation == "div") { return a / b; }
+  }
+}
+
+// 2. Attach it to your agent
+agent MathBot {
+  provider: "openai",
+  model: "gpt-4o-mini",
+  system: "You are a math assistant. Use Calculator to solve problems.",
+  skills: [Calculator]
+}
+
+// 3. Run it
+emit MathBot.ask("What is 25 multiplied by 4?");
+```
+
+---
+
+## Skills Library
 
 ### Utility
-| Skill | File | Description |
-|-------|------|-------------|
-| `Calculator` | [utility/calculator](./skills/utility/calculator/) | Add, subtract, multiply, divide, power, square root |
-| `UUIDGen` | [utility/uuid-gen](./skills/utility/uuid-gen/) | Generate a random UUID v4 |
-| `GetTimestamp` `FormatTime` | [utility/timer](./skills/utility/timer/) | Current timestamp, format dates |
-| `TextUpper` `TextLower` `TextTrim` | [utility/text-tools](./skills/utility/text-tools/) | Uppercase, lowercase, trim whitespace |
-| `Hasher` `Base64Encode` | [utility/hasher](./skills/utility/hasher/) | SHA256/SHA1/MD5 hash, Base64 encode |
+| Skill | Description |
+|-------|-------------|
+| `Calculator` | Add, subtract, multiply, divide, power, square root |
+| `UUIDGen` | Generate a random UUID v4 |
+| `GetTimestamp` `FormatTime` | Current time and date formatting |
+| `TextUpper` `TextLower` `TextTrim` | Text transformations |
+| `Hasher` `Base64Encode` | SHA256/SHA1/MD5 hashing, Base64 encoding |
 
 ### Web
-| Skill | File | Description |
-|-------|------|-------------|
-| `WebFetch` | [web/web-fetch](./skills/web/web-fetch/) | Fetch a URL with HTTP GET |
-| `HTTPRequest` | [web/http-request](./skills/web/http-request/) | POST/GET/PUT/DELETE with body and headers |
-| `URLBuilder` | [web/url-builder](./skills/web/url-builder/) | Build a URL from base, path, and query string |
+| Skill | Description |
+|-------|-------------|
+| `WebFetch` | Fetch a URL with HTTP GET |
+| `HTTPRequest` | Full HTTP requests — POST, GET, PUT, DELETE |
+| `URLBuilder` | Build URLs from base, path, and query params |
 
 ### Data
-| Skill | File | Description |
-|-------|------|-------------|
-| `JSONParser` `JSONFormatter` | [data/json-tools](./skills/data/json-tools/) | Parse JSON strings, convert objects to JSON |
-| `CSVParser` | [data/csv-parser](./skills/data/csv-parser/) | Parse CSV text into rows |
-| `DataCounter` | [data/data-counter](./skills/data/data-counter/) | Count items in a JSON array |
+| Skill | Description |
+|-------|-------------|
+| `JSONParser` `JSONFormatter` | Parse and format JSON |
+| `CSVParser` | Parse CSV text into rows |
+| `DataCounter` | Count items in a JSON array |
 
 ### File
-| Skill | File | Description |
-|-------|------|-------------|
-| `FileReader` | [file/file-reader](./skills/file/file-reader/) | Read a file from disk |
-| `FileWriter` | [file/file-writer](./skills/file/file-writer/) | Write content to a file |
-| `FileExists` | [file/file-exists](./skills/file/file-exists/) | Check if a file exists |
-| `FileCopy` | [file/file-copy](./skills/file/file-copy/) | Copy a file from one path to another |
+| Skill | Description |
+|-------|-------------|
+| `FileReader` | Read a file from disk |
+| `FileWriter` | Write content to a file |
+| `FileExists` | Check if a file exists |
+| `FileCopy` | Copy a file from one path to another |
 
 ### Math
-| Skill | File | Description |
-|-------|------|-------------|
-| `UnitConverter` | [math/unit-converter](./skills/math/unit-converter/) | Convert km/miles, kg/lbs, celsius/fahrenheit, meters/feet |
-| `FindMax` `FindMin` | [math/statistics](./skills/math/statistics/) | Max and min from a list of numbers |
+| Skill | Description |
+|-------|-------------|
+| `UnitConverter` | Convert km/miles, kg/lbs, celsius/fahrenheit, meters/feet |
+| `FindMax` `FindMin` | Max and min from a list of numbers |
 
 ### Security
-| Skill | File | Description |
-|-------|------|-------------|
-| `PasswordValidator` | [security/password-validator](./skills/security/password-validator/) | Check password strength |
-| `HMACSign` | [security/hmac-sign](./skills/security/hmac-sign/) | Generate an HMAC signature |
+| Skill | Description |
+|-------|-------------|
+| `PasswordValidator` | Check password strength |
+| `HMACSign` | Generate an HMAC signature with a secret key |
 
 ### Development
-| Skill | File | Description |
-|-------|------|-------------|
-| `LogFormatter` | [development/log-formatter](./skills/development/log-formatter/) | Format log messages with timestamp and level |
-| `JSONValidator` | [development/json-validator](./skills/development/json-validator/) | Check if a string is valid JSON |
+| Skill | Description |
+|-------|-------------|
+| `LogFormatter` | Format log messages with timestamp and level |
+| `JSONValidator` | Validate whether a string is valid JSON |
 
 ### Productivity
-| Skill | File | Description |
-|-------|------|-------------|
-| `WordCounter` `CharCounter` | [productivity/word-counter](./skills/productivity/word-counter/) | Count words and characters |
-| `DaysFromNow` `TimestampToDate` | [productivity/date-calculator](./skills/productivity/date-calculator/) | Future dates, timestamp conversion |
+| Skill | Description |
+|-------|-------------|
+| `WordCounter` `CharCounter` | Count words and characters in text |
+| `DaysFromNow` `TimestampToDate` | Future dates and timestamp conversion |
+
+---
+
+## Repo Structure
+
+```
+NeamSkills/
+├── skills/
+│   ├── neam-programming/     ← Claude Code skill (SKILL.md)
+│   │   └── SKILL.md
+│   ├── utility/              ← Ready-made .neam skills
+│   │   ├── calculator/
+│   │   ├── uuid-gen/
+│   │   ├── timer/
+│   │   ├── text-tools/
+│   │   └── hasher/
+│   ├── web/
+│   │   ├── web-fetch/
+│   │   ├── http-request/
+│   │   └── url-builder/
+│   ├── data/
+│   │   ├── json-tools/
+│   │   ├── csv-parser/
+│   │   └── data-counter/
+│   ├── file/
+│   │   ├── file-reader/
+│   │   ├── file-writer/
+│   │   ├── file-exists/
+│   │   └── file-copy/
+│   ├── math/
+│   │   ├── unit-converter/
+│   │   └── statistics/
+│   ├── security/
+│   │   ├── password-validator/
+│   │   └── hmac-sign/
+│   ├── development/
+│   │   ├── log-formatter/
+│   │   └── json-validator/
+│   └── productivity/
+│       ├── word-counter/
+│       └── date-calculator/
+└── README.md
+```
+
+---
+
+## Links
+
+- [Neam Language](https://github.com/neam-lang/Neam) — compiler, runtime, REPL
+- [Neam Documentation](https://github.com/neam-lang/Neam/blob/main/README.md)
 
 ---
 
